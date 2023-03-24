@@ -18,7 +18,10 @@ namespace pbl3_appstore.models
         public DateTime date_of_birth { get; set; }
         public string? phone_number { get; set; }
         public string? email { get; set; }
+        public string? password { get; set; }
 
+
+        public string? rePassword { get; set; }
         public int role_id { get; set; }
         public virtual Role? role { get; set; }
     }
