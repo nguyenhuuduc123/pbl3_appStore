@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pbl3_appstore.models;
 
@@ -11,9 +12,11 @@ using pbl3_appstore.models;
 namespace pbl3_appstore.Migrations
 {
     [DbContext(typeof(appStoreDbcontext))]
-    partial class appStoreDbcontextModelSnapshot : ModelSnapshot
+    [Migration("20230324064815_v7")]
+    partial class v7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

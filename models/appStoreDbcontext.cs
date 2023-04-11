@@ -16,12 +16,12 @@ namespace pbl3_appstore.models
         {
            get { return instance; }
            
-        }
+       }
         
         private appStoreDbcontext() {
             Console.WriteLine(ConfigurationManager.AppSettings["connectionString"]);
        }
-        private readonly string connectionStrings = @"Data Source=localhost,1433;Initial Catalog=appdb1;User ID=SA;Password=password123;Trusted_Connection=False;Encrypt=False;MultipleActiveResultSets=true;";
+        //private readonly string connectionStrings = @"Data Source=localhost,1433;Initial Catalog=appdb1;User ID=SA;Password=password123;Trusted_Connection=False;Encrypt=False;MultipleActiveResultSets=true;";
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,7 +43,7 @@ namespace pbl3_appstore.models
         public virtual DbSet<Customer> customers { set; get; }
         public virtual DbSet<ProductGuarantee> productGuarantees { set; get; }
         public virtual DbSet<Role> roles { set; get; }
-
+        public virtual DbSet<Category> Categories { set; get; }
         public virtual DbSet<Staff> staffs { set; get; }
         public virtual DbSet<StatusGuarantee> statusGuarantees { set; get; }
 

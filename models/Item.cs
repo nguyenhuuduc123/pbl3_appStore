@@ -18,6 +18,7 @@ namespace pbl3_appstore.models
 
         public string? price_pay { get; set; }
 
+        public virtual Category? category { get; set; }
 
         // invoice relationship
         public virtual Invoice? invoice { get; set; }
