@@ -15,6 +15,16 @@ namespace pbl3_appstore.services
 
         public AppStoreService() { }
 
+
+        public bool getPersonCurrent(Person p)
+        {
+            if (p.role == "admin" ) {
+            return true}
+
+
+            return false;
+        }
+
         
         
        
