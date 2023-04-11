@@ -6,11 +6,53 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace pbl3_appstore.Migrations
 {
     /// <inheritdoc />
-    public partial class datav4 : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    item_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "invoices",
+                columns: table => new
+                {
+                    invoice_id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    type = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_invoices", x => x.invoice_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logins",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logins", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "productGuarantees",
                 columns: table => new
@@ -40,21 +82,6 @@ namespace pbl3_appstore.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_roles", x => x.role_id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "staffs",
-                columns: table => new
-                {
-                    staff_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    position = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    salary = table.Column<double>(type: "float", nullable: false),
-                    product_guarantee_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_staffs", x => x.staff_id);
                 });
 
             migrationBuilder.CreateTable(
@@ -89,60 +116,31 @@ namespace pbl3_appstore.Migrations
                     date_of_birth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     phone_number = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    role_id = table.Column<int>(type: "int", nullable: false)
+                    password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    rePassword = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    role_id = table.Column<int>(type: "int", nullable: false),
+                    login_id = table.Column<int>(type: "int", nullable: false),
+                    invoice_id = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_persons", x => x.person_id);
                     table.ForeignKey(
+                        name: "FK_persons_Logins_login_id",
+                        column: x => x.login_id,
+                        principalTable: "Logins",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_persons_invoices_invoice_id",
+                        column: x => x.invoice_id,
+                        principalTable: "invoices",
+                        principalColumn: "invoice_id");
+                    table.ForeignKey(
                         name: "FK_persons_roles_role_id",
                         column: x => x.role_id,
                         principalTable: "roles",
                         principalColumn: "role_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "invoices",
-                columns: table => new
-                {
-                    invoice_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    staff_id = table.Column<int>(type: "int", nullable: false),
-                    item_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_invoices", x => x.invoice_id);
-                    table.ForeignKey(
-                        name: "FK_invoices_staffs_staff_id",
-                        column: x => x.staff_id,
-                        principalTable: "staffs",
-                        principalColumn: "staff_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "customers",
-                columns: table => new
-                {
-                    customer_id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    phonenumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    invoice_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_customers", x => x.customer_id);
-                    table.ForeignKey(
-                        name: "FK_customers_invoices_invoice_id",
-                        column: x => x.invoice_id,
-                        principalTable: "invoices",
-                        principalColumn: "invoice_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -155,16 +153,30 @@ namespace pbl3_appstore.Migrations
                     item_count = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     price_import = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     price_pay = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    product_guarantee_id = table.Column<int>(type: "int", nullable: false)
+                    invoice_id = table.Column<int>(type: "int", nullable: false),
+                    product_guarantee_id = table.Column<int>(type: "int", nullable: false),
+                    person_id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_items", x => x.item_id);
                     table.ForeignKey(
-                        name: "FK_items_invoices_item_id",
+                        name: "FK_items_Categories_item_id",
                         column: x => x.item_id,
+                        principalTable: "Categories",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_items_invoices_invoice_id",
+                        column: x => x.invoice_id,
                         principalTable: "invoices",
                         principalColumn: "invoice_id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_items_persons_person_id",
+                        column: x => x.person_id,
+                        principalTable: "persons",
+                        principalColumn: "person_id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_items_productGuarantees_product_guarantee_id",
@@ -197,20 +209,30 @@ namespace pbl3_appstore.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_customers_invoice_id",
-                table: "customers",
-                column: "invoice_id",
-                unique: true);
+                name: "IX_items_invoice_id",
+                table: "items",
+                column: "invoice_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_invoices_staff_id",
-                table: "invoices",
-                column: "staff_id");
+                name: "IX_items_person_id",
+                table: "items",
+                column: "person_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_items_product_guarantee_id",
                 table: "items",
                 column: "product_guarantee_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_persons_invoice_id",
+                table: "persons",
+                column: "invoice_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_persons_login_id",
+                table: "persons",
+                column: "login_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -236,31 +258,31 @@ namespace pbl3_appstore.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "customers");
-
-            migrationBuilder.DropTable(
-                name: "persons");
-
-            migrationBuilder.DropTable(
                 name: "statusGuarantees");
 
             migrationBuilder.DropTable(
                 name: "suppliers");
 
             migrationBuilder.DropTable(
-                name: "roles");
-
-            migrationBuilder.DropTable(
                 name: "items");
 
             migrationBuilder.DropTable(
-                name: "invoices");
+                name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "persons");
 
             migrationBuilder.DropTable(
                 name: "productGuarantees");
 
             migrationBuilder.DropTable(
-                name: "staffs");
+                name: "Logins");
+
+            migrationBuilder.DropTable(
+                name: "invoices");
+
+            migrationBuilder.DropTable(
+                name: "roles");
         }
     }
 }

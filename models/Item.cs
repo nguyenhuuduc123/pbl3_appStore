@@ -21,6 +21,10 @@ namespace pbl3_appstore.models
         public virtual Category? category { get; set; }
 
         // invoice relationship
+
+
+        public int invoice_id { get; set; }
+        [ForeignKey("invoice_id")]
         public virtual Invoice? invoice { get; set; }
 
         
@@ -31,5 +35,10 @@ namespace pbl3_appstore.models
         public int product_guarantee_id { set; get; }
         [ForeignKey("product_guarantee_id")]
         public virtual ProductGuarantee? productGuarantee { get; set; }
+
+
+        public int person_id { set; get; }
+        [ForeignKey("person_id")]
+        public virtual Person? person { get; set; }
     }
 }

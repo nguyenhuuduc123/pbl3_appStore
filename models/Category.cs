@@ -19,6 +19,6 @@ namespace pbl3_appstore.models
 
         public int item_id { get; set; }
         [ForeignKey("item_id")]
-        public virtual ICollection<Item> item { get; set; }
+        public virtual ICollection<Item>? item { get; set; }
     }
 }

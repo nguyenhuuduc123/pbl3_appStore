@@ -10,17 +10,17 @@ namespace pbl3_appstore.models
 {
     public class appStoreDbcontext : DbContext
     {
-       private static appStoreDbcontext instance  = new appStoreDbcontext();
+      // private static appStoreDbcontext instance  = new appStoreDbcontext();
 
-        public static appStoreDbcontext _instance
-        {
-           get { return instance; }
-           
-       }
+       // public static appStoreDbcontext _instance
+       // {
+       //    get { return instance; }
+      //     
+      // }
         
-        private appStoreDbcontext() {
-            Console.WriteLine(ConfigurationManager.AppSettings["connectionString"]);
-       }
+       // private appStoreDbcontext() {
+      //      Console.WriteLine(ConfigurationManager.AppSettings["connectionString"]);
+      // }
         //private readonly string connectionStrings = @"Data Source=localhost,1433;Initial Catalog=appdb1;User ID=SA;Password=password123;Trusted_Connection=False;Encrypt=False;MultipleActiveResultSets=true;";
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -40,13 +40,13 @@ namespace pbl3_appstore.models
 
         public virtual DbSet<Item> items { set; get; }
         public virtual DbSet<Invoice> invoices { set; get; }
-        public virtual DbSet<Customer> customers { set; get; }
+
         public virtual DbSet<ProductGuarantee> productGuarantees { set; get; }
         public virtual DbSet<Role> roles { set; get; }
         public virtual DbSet<Category> Categories { set; get; }
-        public virtual DbSet<Staff> staffs { set; get; }
+       
         public virtual DbSet<StatusGuarantee> statusGuarantees { set; get; }
-
+        public virtual DbSet<Login> Logins { set; get; }
         public virtual DbSet<Supplier> suppliers { set; get; }
     }
 }

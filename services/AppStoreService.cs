@@ -15,15 +15,7 @@ namespace pbl3_appstore.services
 
         public AppStoreService() { }
 
-        public Person createPerson(DateTime birday)
-        {
-
-            return new Person() {
-                date_of_birth = new DateTime(),
-                address = "phu trung",
-                email  = "duclatao@gmail.com"
-            };
-        }
+        
         
        
     }

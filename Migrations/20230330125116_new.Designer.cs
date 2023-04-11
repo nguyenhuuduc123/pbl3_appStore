@@ -12,8 +12,8 @@ using pbl3_appstore.models;
 namespace pbl3_appstore.Migrations
 {
     [DbContext(typeof(appStoreDbcontext))]
-    [Migration("20230324064815_v7")]
-    partial class v7
+    [Migration("20230330125116_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,38 +44,7 @@ namespace pbl3_appstore.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("item_id")
-                        .IsUnique();
-
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("pbl3_appstore.models.Customer", b =>
-                {
-                    b.Property<int>("customer_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customer_id"));
-
-                    b.Property<string>("address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("invoice_id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("phonenumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("customer_id");
-
-                    b.HasIndex("invoice_id")
-                        .IsUnique();
-
-                    b.ToTable("customers");
                 });
 
             modelBuilder.Entity("pbl3_appstore.models.Invoice", b =>
@@ -89,18 +58,10 @@ namespace pbl3_appstore.Migrations
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("item_id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("staff_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("invoice_id");
-
-                    b.HasIndex("staff_id");
 
                     b.ToTable("invoices");
                 });
@@ -110,11 +71,17 @@ namespace pbl3_appstore.Migrations
                     b.Property<int>("item_id")
                         .HasColumnType("int");
 
+                    b.Property<int>("invoice_id")
+                        .HasColumnType("int");
+
                     b.Property<string>("item_count")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("item_name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("person_id")
+                        .HasColumnType("int");
 
                     b.Property<string>("price_import")
                         .HasColumnType("nvarchar(max)");
@@ -127,10 +94,33 @@ namespace pbl3_appstore.Migrations
 
                     b.HasKey("item_id");
 
+                    b.HasIndex("invoice_id");
+
+                    b.HasIndex("person_id");
+
                     b.HasIndex("product_guarantee_id")
                         .IsUnique();
 
                     b.ToTable("items");
+                });
+
+            modelBuilder.Entity("pbl3_appstore.models.Login", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<string>("email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("id");
+
+                    b.ToTable("Logins");
                 });
 
             modelBuilder.Entity("pbl3_appstore.models.Person", b =>
@@ -156,6 +146,12 @@ namespace pbl3_appstore.Migrations
                     b.Property<bool>("gender")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("invoice_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("login_id")
+                        .HasColumnType("int");
+
                     b.Property<string>("password")
                         .HasColumnType("nvarchar(max)");
 
@@ -169,6 +165,11 @@ namespace pbl3_appstore.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("person_id");
+
+                    b.HasIndex("invoice_id");
+
+                    b.HasIndex("login_id")
+                        .IsUnique();
 
                     b.HasIndex("role_id")
                         .IsUnique();
@@ -223,28 +224,6 @@ namespace pbl3_appstore.Migrations
                     b.ToTable("roles");
                 });
 
-            modelBuilder.Entity("pbl3_appstore.models.Staff", b =>
-                {
-                    b.Property<int?>("staff_id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("staff_id"));
-
-                    b.Property<string>("position")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("product_guarantee_id")
-                        .HasColumnType("int");
-
-                    b.Property<double>("salary")
-                        .HasColumnType("float");
-
-                    b.HasKey("staff_id");
-
-                    b.ToTable("staffs");
-                });
-
             modelBuilder.Entity("pbl3_appstore.models.StatusGuarantee", b =>
                 {
                     b.Property<int>("status_guarantee_id")
@@ -295,44 +274,23 @@ namespace pbl3_appstore.Migrations
                     b.ToTable("suppliers");
                 });
 
-            modelBuilder.Entity("pbl3_appstore.models.Category", b =>
-                {
-                    b.HasOne("pbl3_appstore.models.Item", "item")
-                        .WithOne("category")
-                        .HasForeignKey("pbl3_appstore.models.Category", "item_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("item");
-                });
-
-            modelBuilder.Entity("pbl3_appstore.models.Customer", b =>
-                {
-                    b.HasOne("pbl3_appstore.models.Invoice", "invoice")
-                        .WithOne("customer")
-                        .HasForeignKey("pbl3_appstore.models.Customer", "invoice_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("invoice");
-                });
-
-            modelBuilder.Entity("pbl3_appstore.models.Invoice", b =>
-                {
-                    b.HasOne("pbl3_appstore.models.Staff", "staff")
-                        .WithMany("Invoices")
-                        .HasForeignKey("staff_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("staff");
-                });
-
             modelBuilder.Entity("pbl3_appstore.models.Item", b =>
                 {
                     b.HasOne("pbl3_appstore.models.Invoice", "invoice")
                         .WithMany("items")
+                        .HasForeignKey("invoice_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pbl3_appstore.models.Category", "category")
+                        .WithMany("item")
                         .HasForeignKey("item_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("pbl3_appstore.models.Person", "person")
+                        .WithMany("Item")
+                        .HasForeignKey("person_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -342,18 +300,36 @@ namespace pbl3_appstore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("category");
+
                     b.Navigation("invoice");
+
+                    b.Navigation("person");
 
                     b.Navigation("productGuarantee");
                 });
 
             modelBuilder.Entity("pbl3_appstore.models.Person", b =>
                 {
+                    b.HasOne("pbl3_appstore.models.Invoice", "Invoice")
+                        .WithMany()
+                        .HasForeignKey("invoice_id");
+
+                    b.HasOne("pbl3_appstore.models.Login", "Login")
+                        .WithOne("person")
+                        .HasForeignKey("pbl3_appstore.models.Person", "login_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("pbl3_appstore.models.Role", "role")
                         .WithOne("person")
                         .HasForeignKey("pbl3_appstore.models.Person", "role_id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Invoice");
+
+                    b.Navigation("Login");
 
                     b.Navigation("role");
                 });
@@ -380,18 +356,29 @@ namespace pbl3_appstore.Migrations
                     b.Navigation("item");
                 });
 
+            modelBuilder.Entity("pbl3_appstore.models.Category", b =>
+                {
+                    b.Navigation("item");
+                });
+
             modelBuilder.Entity("pbl3_appstore.models.Invoice", b =>
                 {
-                    b.Navigation("customer");
-
                     b.Navigation("items");
                 });
 
             modelBuilder.Entity("pbl3_appstore.models.Item", b =>
                 {
-                    b.Navigation("category");
-
                     b.Navigation("supplier");
+                });
+
+            modelBuilder.Entity("pbl3_appstore.models.Login", b =>
+                {
+                    b.Navigation("person");
+                });
+
+            modelBuilder.Entity("pbl3_appstore.models.Person", b =>
+                {
+                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("pbl3_appstore.models.ProductGuarantee", b =>
@@ -404,11 +391,6 @@ namespace pbl3_appstore.Migrations
             modelBuilder.Entity("pbl3_appstore.models.Role", b =>
                 {
                     b.Navigation("person");
-                });
-
-            modelBuilder.Entity("pbl3_appstore.models.Staff", b =>
-                {
-                    b.Navigation("Invoices");
                 });
 #pragma warning restore 612, 618
         }

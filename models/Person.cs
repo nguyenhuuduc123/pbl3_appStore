@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,13 @@ namespace pbl3_appstore.models
 
         public string? rePassword { get; set; }
         public int role_id { get; set; }
+        [ForeignKey("role_id")]
         public virtual Role? role { get; set; }
+        public int login_id { get; set; }
+        [ForeignKey("login_id")]
+        public virtual Login? Login { get; set; }
+        public virtual Invoice? Invoice { get; set; }
+        public virtual ICollection<Item>? Item { get; set; }
+
     }
 }

@@ -15,17 +15,7 @@ namespace pbl3_appstore.models
         public DateTime date { set; get; }
         public string? type { set; get; }
 
-        // customer relation 
-        public virtual Customer? customer { set; get; }
-
-
-        // staff relationship
-        public int staff_id { set; get; }
-        [ForeignKey("staff_id")]
-        public virtual Staff? staff { set; get; }
-        // item relationship
-        public int item_id { set; get; }
-        [ForeignKey("item_id")]
+       
         public virtual ICollection<Item>? items { set; get;}
 
     }
